@@ -236,13 +236,13 @@ No   Variable                               Label                               
 <pre><code>Switching method to 'browser'</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Output file written: C:\Users\Mau\AppData\Local\Temp\RtmpmopzpF\file19f470832f43.html</code></pre>
+<pre><code>Output file written: C:\Users\Mau\AppData\Local\Temp\RtmpYRfJGz\file2bb839085cc3.html</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Switching method to 'browser'</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Output file written: C:\Users\Mau\AppData\Local\Temp\RtmpmopzpF\file19f45e61289c.html</code></pre>
+<pre><code>Output file written: C:\Users\Mau\AppData\Local\Temp\RtmpYRfJGz\file2bb82356587b.html</code></pre>
 </div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
@@ -253,7 +253,7 @@ No   Variable                               Label                               
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">C:19f45e61289c.html</td>
+<td style="text-align: left;">C:2bb82356587b.html</td>
 </tr>
 </tbody>
 </table>
@@ -490,7 +490,9 @@ Sistema_salud             0.22920266        -0.22978528    1.00000000</code></pr
 <p>Podemos observar que las relaciones significativas se encuentran asociadas a la relacion entre Ingresos y Nivel educacional (0,375), junto a la relación entre Ingresos y Sistema de Salud (0,361). Esto sugiere que la relación aceptable entre el ingreso y el nivel educacional junto al sistema de salud, son aquellas variables que mayor relación poseen.</p>
 <p>Por otra parte, para observar la consistencia del conjunto de variables que hemos seleccionado para medir el fenómeno aplicaremos un test de Alpha de Cronbach para obtener información sobre la fiabilidad de la escala compuesta por dichas variables:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(PROC_DATA, <span class="at">check.keys =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Alpha de Cronbach</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(PROC_DATA, <span class="at">check.keys =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Number of categories should be increased  in order to count frequencies. </code></pre>
 </div>
@@ -543,7 +545,9 @@ Sistema_salud       887 0.361  0.56 0.440  0.361       1.1      0.43</code></pre
 <p>Esta tabla nos muestra los resultados del análisis de fiabilidad, demostrando que entrevariables del conjunto existeuna consistencia interna moderada, de 0.54.</p>
 <p>Ahora bien, si aplicamos otro análisis de fiabilidad, sin considerar las variables de Red de apoyo (Red_apoyo), Tipo de vivienda (Tipo_vivienda) y Sistema de salud al que pertenece la persona (Sistema_salud), podemos notar que el índice de fiabilidad correspondiente a Alpha de Cronbach, aumenta a 0.63, como se ve en el siguiente análisis.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(dplyr<span class="sc">::</span><span class="fu">select</span>(PROC_DATA, Ingresos, Estado_Vivienda, Nivel_educacional, Ocupacion_u_oficio),<span class="at">check.keys =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Alpha de Cronbach recodificado</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>psych<span class="sc">::</span><span class="fu">alpha</span>(dplyr<span class="sc">::</span><span class="fu">select</span>(PROC_DATA, Ingresos, Estado_Vivienda, Nivel_educacional, Ocupacion_u_oficio),<span class="at">check.keys =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning in psych::alpha(dplyr::select(PROC_DATA, Ingresos, Estado_Vivienda, : Some items were negatively correlated with total scale and were automatically reversed.
  This is indicated by a negative sign for the variable name.</code></pre>
@@ -587,7 +591,33 @@ Estado_Vivienda    0.00 0.00 0.00 0.02 0.03 0.05 0.16 0.10 0.12 0.51    0
 Ocupacion_u_oficio 0.01 0.01 0.07 0.10 0.02 0.17 0.09 0.13 0.11 0.28    0</code></pre>
 </div>
 </div>
-<p>Finalmente, podemos dar cuenta de que la consistencia de las variables del conjunto es considerablemente aceptable, por lo que la medición de la pobreza multidimensional en áreas rurales de la región del Biobío</p>
+<p>Finalmente, podemos dar cuenta de que la consistencia de las variables del conjunto es considerablemente aceptable, por lo que la medición de la pobreza multidimensional en áreas rurales de la región del Biobío puede ser explicada a través de la creación de una escala a través de este conjunto de variables y su respectivo análisis.</p>
+<p>Procedemos a crear una escala:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Escala:</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>PROC_DATA <span class="ot">&lt;-</span> PROC_DATA <span class="sc">%&gt;%</span> </span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Pobreza_multidi_rural =</span> <span class="fu">sum</span>(Ingresos, Estado_Vivienda, Nivel_educacional, Ocupacion_u_oficio))</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(PROC_DATA<span class="sc">$</span>Pobreza_multidi_rural)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+     16  350022  400024  471929  520023 2500026 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(PROC_DATA, <span class="fu">aes</span>(<span class="at">x =</span> Pobreza_multidi_rural)) <span class="sc">+</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">150000</span>, <span class="at">colour =</span> <span class="st">"black"</span>, <span class="at">fill =</span> <span class="st">"yellow"</span>) <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"Pobreza multidimensional rural"</span>) <span class="sc">+</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Frecuencia"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Pobreza_rural_Biobio_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Podemos observar y concluir gracias a la escala, que la mayor cantidad de pobreza multidimensional en las zonas rurales de la rgión del Biobío se encuentra asociado a las persnas que tienen ingresos de entre $400.000 y $500.000</p>
 
 </section>
 </section>

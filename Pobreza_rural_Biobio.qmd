@@ -1,0 +1,168 @@
+---
+title: "Evolución Pobreza Rural en la Región del Biobío"
+author: "Mauricio Jara Saavedra"
+format: html
+editor: visual
+bibliography: TrabajoR_Pobreza_Rural_Biobio.bib
+link-citations: true
+---
+
+# Análisis de la pobreza multidimensional en los sectores rurales de Chile: estudio local en la región del Bío-Bio.
+
+La pobreza en Chile ha sido un fenómeno que ha acompañado al desarrollo del país constantemente y la medición de esta se ha realizado de manera más formal y sistemática a partir de la aplicación de la Encuesta de Caracterización Socioeconómica Nacional (CASEN), la cual ha implementado la medición de la pobreza multidimensional a partir del año 2013 [@herreraPobrezaMultidimensionalChile], con el fin de aportar a una comprensión más amplia y detallada de las condiciones de vida de la población, implementando dimensiones como educación, salud, trabajo, vivienda y redes sociales.
+
+Ahora bien, si llevamos esta medición de la pobreza multidimensional a los sectores rurales, podremos ver como los indicadores multidimensionales nos permiten agudizar el análisis, permitiendo así obtener una información mas detallada de las condiciones de vida de las personas en los sectores rurales del país.
+
+Según un análisis comparativo de las carencias y brechas en los hogares rurales de Chile, se plantea que, a nivel general, las carencias se encuentran mas acentuadas en las zonas rurales y que estas se agudizan al utilizar indicadores multidimensionales para su medición. [@rodriguez-garcesReconfiguracionMapaPobreza2018] Por lo que llevar a cabo un análisis de la evolución de estos indicadores en comparación a sectores urbanos, nos proporcionará una información más detallada de las condiciones de vida de estos sectores.
+
+Por otro lado, cabe señalar que la relación entre educación, ruralidad y pobreza no es algo sencillo, y si consideramos el rol de la educación a la hora de reducir la brecha de desigualdades en las oportunidades, podremos observar que la educación para la población rural ha sido escasamente atendida. [@vera-bachmannResilienciaPobrezaRuralidad2015] Esto ha llevado a que la brecha de desigualdad social se mantenga en el país.
+
+Para los efectos de este trabajo consideraremos las definiciones manifestadas por el Ministerio de Vivienda y Urbanismo en el decreto N° 47, [@decreto1992] en el cual se refiere a un Área urbana como la superficie del territorio ubicado al interior del límite urbano; un Área rural como territorio ubicado fuera del límite urbano; y Límite Urbano como la línea imaginaria que delimita las áreas urbanas.
+
+Con lo anterior, nos referiremos al fenómeno de pobreza multidimensional según la medida oficial de Chile, la cual incluye 5 dimensiones que son reconocidas como socialmente necesarias. Estas dimensiones son: Educación; Salud; Trabajo y seguridad social; Vivienda y Entorno; Redes y Cohesión social. [@PNUD] A lo anterior, hemos decidido agregar los ingresos, ya que estos nos servirán como un punto de referencia más claro a la hora de evaluar la pobreza multidimensional.
+
+Ahora bien, por efectos de lo que se pretende llevar a cabo en este estudio, se acotará el estudio a la 8va región de Chile, la "Región del Biobío", ya que esta región presenta un alto porcentaje de su población viviendo en áreas rurales.
+
+Con lo anterior, llevaremos un análisis en base a los resultados obtenidos por la CASEN2022, con el fin de ver como se comporta la pobreza multidimensional en la región del Biobío. Para esto procederemos a manipular la base de datos con el fin de poder observar las distintas mediciones y su comportamiento.
+
+### Trabajo en R: Ajustes iniciales, carga de paquetes y base de datos:
+
+En este punto cabe mencionar que por motivos de optimizar el documento, se trabajará con una base de datos recodificada, especificamente filtrando por la 8va región del Biobío, y por las áreas rurales, lo que lleva a un total de 4081 observaciones.
+
+```{r}
+#Ajustes iniciales: 
+options(scipen=999) 
+#Paquetes:
+library(pacman)
+pacman::p_load(haven,
+               sjlabelled,
+               dplyr, #Manipulacion de datos
+               stargazer, #Tablas
+               sjmisc, # Tablas
+               summarytools, # Tablas
+               kableExtra, #Tablas
+               sjPlot, #Tablas y gráficos
+               corrplot, # Correlaciones
+               sessioninfo, # Información de la sesión de trabajo
+               ggplot2) # Para la mayoría de los gráficos
+
+# 1.Base de datos:
+load(file = "Input/PROC_DATA.RData")
+```
+
+### Descriptivos:
+
+```{r}
+# 3.Descripción de variables:
+
+#| label: tbl-sjmisc 
+#| #| tbl-cap: “Descriptivos indicadores Pobreza región Biobío”
+dim(PROC_DATA)
+summarytools::dfSummary(PROC_DATA, plain.ascii = FALSE)
+view(dfSummary(PROC_DATA, headings=FALSE))%>% 
+      kable(.,"markdown") 
+```
+
+Si observamos brevemente la información proporcionada por la tabla descriptiva, podemos observar que una vez recodificada y filtrada la base de datos, nos quedamos con un total de 4.081 observaciones en la región del Biobío de un total de 1.556.805 millones de habitantes según el Censo 2017. Correspondientes unicamente al sector rural de la región por lo que tenemos una muestra considerablemente representativa.
+
+A esto, podemos agregar información respecto a los ingresos promedio, los cuales son aproximadamente de \$470.000. Junto a información respecto al nivel educativo de las personas, el cual en promedio indica un nivel de estudios de enseñanza media completa.
+
+### Gráficos univariados:
+
+```{r}
+# 3.1 Gráficos univariados.
+
+#| label: fig-gdp
+#| fig-cap: “Nivel Educativo”
+#Vivienda
+frq(PROC_DATA$Nivel_educacional)
+
+ggplot(PROC_DATA, aes(x = Nivel_educacional))+
+  geom_bar(fill = "coral") +
+  labs(title = "Nivel educativo")
+```
+
+En el gráfico correspondiente al nivel educativo de las áreas rurales en la región del Biobío, podemos evidenciar como la mayor frecuencia se encuentra en el 7, lo cual corresponde a una educación básica completa.
+
+```{r}
+# 3.1 Gráficos univariados.  
+#| label: fig-gdp 
+#| #| fig-cap: “Vivienda” 
+#| #Vivienda 
+frq(PROC_DATA$Tipo_vivienda) 
+frq(PROC_DATA$Estado_Vivienda)
+
+ggplot(PROC_DATA, aes(x = Tipo_vivienda))+
+  geom_bar(fill = "coral") +
+  labs(title = "Tipo de Vivienda")
+
+ggplot(PROC_DATA, aes(x = Estado_Vivienda))+
+  geom_bar(fill = "coral") +
+  labs(title = "Estado de Vivienda")
+```
+
+Por otro lado si nos fijamos en el gráfico correspondiente al tipo de vivienda y al gráfico correspondiente al estado de las viviendas, podemos observar que en las áreas rurales de la región, el tipo de vivienda predominante corresponde a un tipo de casa aislada (no pareada). En general el estado de conservación de estas viviendas, considerando piso, murallas y techo, se considera aceptablemente bueno.
+
+Ahora bien, a modo de analizar como se relacionan estas variables para describir la situación de pobreza multidimensional en las áreas rurales de la región del Biobío, veamos la siguiente tabla de correlaciones:
+
+```{r}
+#CORRELACIONES:
+
+PROC_DATA <- mutate_all(PROC_DATA, as.numeric)
+
+COR_PROC_DATA <- cor(PROC_DATA,
+         use = "complete.obs")
+COR_PROC_DATA
+
+sjPlot::tab_corr(PROC_DATA, 
+                 triangle = "lower")
+
+corrplot.mixed(COR_PROC_DATA)
+```
+
+Podemos observar que las relaciones significativas se encuentran asociadas a la relacion entre Ingresos y Nivel educacional (0,375), junto a la relación entre Ingresos y Sistema de Salud (0,361). Esto sugiere que la relación aceptable entre el ingreso y el nivel educacional junto al sistema de salud, son aquellas variables que mayor relación poseen.
+
+Por otra parte, para observar la consistencia del conjunto de variables que hemos seleccionado para medir el fenómeno aplicaremos un test de Alpha de Cronbach para obtener información sobre la fiabilidad de la escala compuesta por dichas variables:
+
+```{r}
+
+#Alpha de Cronbach
+
+psych::alpha(PROC_DATA, check.keys = TRUE)
+
+```
+
+Esta tabla nos muestra los resultados del análisis de fiabilidad, demostrando que entrevariables del conjunto existeuna consistencia interna moderada, de 0.54.
+
+Ahora bien, si aplicamos otro análisis de fiabilidad, sin considerar las variables de Red de apoyo (Red_apoyo), Tipo de vivienda (Tipo_vivienda) y Sistema de salud al que pertenece la persona (Sistema_salud), podemos notar que el índice de fiabilidad correspondiente a Alpha de Cronbach, aumenta a 0.63, como se ve en el siguiente análisis.
+
+```{r}
+
+#Alpha de Cronbach recodificado
+
+psych::alpha(dplyr::select(PROC_DATA, Ingresos, Estado_Vivienda, Nivel_educacional, Ocupacion_u_oficio),check.keys = TRUE)
+
+```
+
+Finalmente, podemos dar cuenta de que la consistencia de las variables del conjunto es considerablemente aceptable, por lo que la medición de la pobreza multidimensional en áreas rurales de la región del Biobío puede ser explicada a través de la creación de una escala a través de este conjunto de variables y su respectivo análisis.
+
+Procedemos a crear una escala:
+
+```{r}
+
+#Escala:
+
+PROC_DATA <- PROC_DATA %>% 
+  rowwise() %>% 
+  mutate(Pobreza_multidi_rural = sum(Ingresos, Estado_Vivienda, Nivel_educacional, Ocupacion_u_oficio))
+summary(PROC_DATA$Pobreza_multidi_rural)
+
+
+ggplot(PROC_DATA, aes(x = Pobreza_multidi_rural)) +
+  geom_histogram(binwidth = 150000, colour = "black", fill = "yellow") +
+  theme_bw() +
+  xlab("Pobreza multidimensional rural") +
+  ylab("Frecuencia")
+```
+
+Podemos observar y concluir gracias a la escala, que la mayor cantidad de pobreza multidimensional en las zonas rurales de la rgión del Biobío se encuentra asociado a las persnas que tienen ingresos de entre \$400.000 y \$500.000
